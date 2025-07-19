@@ -3,6 +3,7 @@ import datetime
 
 
 
+
 from hub import Hub
 from item import Item
 
@@ -288,4 +289,92 @@ class TestItem(unittest.TestCase):
         print('\n',item1)
         print('\n',item2)
 
-        print("Hello world!")
+
+
+# TESTS FOR HOMEWORK # 3 (DECORATORS)
+
+
+from decorators import even
+from decorators import clip
+from decorators import repeat
+from decorators import cash
+import random
+
+
+class TestDecorators(unittest.TestCase):
+
+    #Test of @even decorator
+    def test_12_even(self):
+        @even
+        def even_test(a, b):
+            return (a, b)
+
+        result1 = even_test(1, b=2)
+        print('\n', "Result: ", result1)
+        self.assertEqual(None, result1)
+
+        result2 = even_test(1, b=2)
+        print('\n', "Result: ", result2)
+        self.assertEqual((1, 2), result2)
+
+
+
+    #Test of @clip decorator
+    def test_13_clip(self):
+        @clip
+        def clip_test(a=1, b=2, c='~', d=4):
+            return (a, b, c, d)
+
+        result = clip_test(2, 3, c=4, d=5)
+        print('\n', "Result: ", result) # 2, 3 , '~', 4
+
+        self.assertEqual((2, 3, '~',4), result)
+
+    # Test of @repeat decorator
+    def test_14_repeat(self):
+        @repeat(4)
+        def repeat_test(a, b):
+            print("Executed! with args:", (a, b))
+
+        print('\n',"Need to execute 4 times")
+        repeat_test(1, b=2)
+
+        @repeat(10)
+        def random_sum(n):
+            print(sum(random.random() for i in range(n)))
+        random_sum(1000000)
+
+
+    # Test of @cash decorator
+    def test_15_cash(self):
+        exec_count = 0
+        @cash
+        def cash_test(a, b):
+            nonlocal exec_count
+            exec_count += 1
+            return (a, b)
+
+        self.assertEqual((1, 2), cash_test(1, b=2))
+        self.assertEqual((1, 2), cash_test(1, b=2))
+        self.assertEqual(1, exec_count)
+        self.assertEqual((3, 2), cash_test(3, b=2))
+        self.assertEqual((3, 2), cash_test(3, b=2))
+        self.assertEqual(2, exec_count)
+        self.assertEqual((1, 3), cash_test(1, b=3))
+        self.assertEqual((1, 3), cash_test(1, b=3))
+        self.assertEqual(3, exec_count)
+
+
+        @cash
+        def fib(x):
+            print('\n', f"вызвана фунция Фибоначчи f({x})")
+            if x < 2:
+                return 1
+            else:
+                return fib(x-1) + fib(x-2)
+
+        fib(10) # вызовет все функции Фибоначчи
+        print(fib(10)) # выдаст только результат от 10
+
+
+
