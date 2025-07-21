@@ -8,6 +8,7 @@ from hub import Hub
 from item import Item
 
 
+
 # Проверка класса Hub
 class TestHub(unittest.TestCase):
     def test_01_hub_singleton(self):
@@ -158,15 +159,15 @@ class TestItem(unittest.TestCase):
     def test_01_item_id(self):
         h = Hub()
         'Проверка того что у разных Items разные id'
-        item1 = Item("TV", "Samsung Qled", "01.07.2025_14:38")
+        item1 = Item("TV", "Samsung Qled", "01.07.2025")
         h.add_item(item1)
-        item2 = Item("PC", "MSI", "01.07.2025_14:52")
+        item2 = Item("PC", "MSI", "01.07.2025")
         h.add_item(item2)
-        item3 = Item("Notebook", "Dell Inspirion", "01.07.2025_15:33")
+        item3 = Item("Notebook", "Dell Inspirion", "01.07.2025")
         h.add_item(item3)
-        item4 = Item("Monitor", "MSI", "01.07.2025_16:22")
+        item4 = Item("Monitor", "MSI", "01.07.2025")
         h.add_item(item4)
-        item5 = Item("Mouse", "HyperX", "01.07.2025_16:24")
+        item5 = Item("Mouse", "HyperX", "01.07.2025")
         h.add_item(item5)
         ids = {item1._id, item2._id, item3._id, item4._id, item5._id}
         self.assertEqual(len(ids), 5, "ID должны быть уникальными у разных объектов Item")
@@ -175,7 +176,7 @@ class TestItem(unittest.TestCase):
     def test_02_len(self):
         h = Hub()
         'Проверка того что при добавлении тэгов меняется значение len(item)'
-        item = Item("Keyboard", "Gigabyte", "01.07.2025_17:32")
+        item = Item("Keyboard", "Gigabyte", "01.07.2025")
         h.add_item(item)
         initial_len = len(item)
         print(f"---\nЗначение до добавления тегов: {len(item)}\n---")
@@ -195,7 +196,7 @@ class TestItem(unittest.TestCase):
     def test_03_equal_tags(self):
         'Проверка того что если к предмету добавить два идентичных тега - их колчество будет один'
         h = Hub()
-        item = Item("Camera", "Sony FX-3", "01.07.2025_18:00")
+        item = Item("Camera", "Sony FX-3", "01.07.2025")
         h.add_item(item)
         item.add_tag("FullHD")
         item.add_tag("FullHD")  # добавляем тот же тег второй раз
@@ -212,18 +213,19 @@ class TestItem(unittest.TestCase):
         print(f"---\nПредмет с id=1:\n {h[0]}\n---")
         print(f"---\nПредмет с id=11:\n {h[11]}\n---")
 
+
     def test_05_find_tags(self):
         h = Hub()
 
-        item1 = Item("TV", "Samsung Qled", "01.07.2025_14:38", ['OLED', '16:9', 'big', '75', 'another'])
+        item1 = Item("TV", "Samsung Qled", "01.07.2025", ['OLED', '16:9', 'big', '75', 'another'])
         h.add_item(item1)
-        item2 = Item("PC", "MSI", "01.07.2025_14:52", ['core i5', 'RTX', 'big', '1200W'])
+        item2 = Item("PC", "MSI", "01.07.2025", ['core i5', 'RTX', 'big', '1200W'])
         h.add_item(item2)
-        item3 = Item("Notebook", "Dell Inspirion", "01.07.2025_15:33", ['laptop', '14', 'keyboard', 'another'])
+        item3 = Item("Notebook", "Dell Inspirion", "01.07.2025", ['laptop', '14', 'keyboard', 'another'])
         h.add_item(item3)
-        item4 = Item("Monitor", "MSI", "01.07.2025_16:22", ['32', 'ips', 'curved', 'small'])
+        item4 = Item("Monitor", "MSI", "01.07.2025", ['32', 'ips', 'curved', 'small'])
         h.add_item(item4)
-        item5 = Item("Mouse", "HyperX", "01.07.2025_16:24", ['Gaming', 'Wireless', 'white', 'another'])
+        item5 = Item("Mouse", "HyperX", "01.07.2025", ['Gaming', 'Wireless', 'white', 'another'])
         h.add_item(item5)
         #print(str(h))
         found_items = h.find_by_tags(["Wireless", "another"])
@@ -253,21 +255,21 @@ class TestItem(unittest.TestCase):
 
     def test_07_set_cost_get_cost(self):
         h = Hub()
-        item = Item("Camera", "Sony FX-3", "01.07.2025_18:00", "", 10)
-        print('\n',"Цена позиции", item._id, item.name, ':', item.get_cost())
+        item = Item("Camera", "Sony FX-3", "01.07.2025", "", 10)
+        print('\n',"Цена позиции", item._id, item.name, ':', item.cost)
         item.set_cost(500)
-        print('\n', "Цена позиции", item._id, item.name, ':', item.get_cost())
+        print('\n', "Цена позиции", item._id, item.name, ':', item.cost)
 
     def test_08_lt(self):
         h = Hub()
-        item1 = Item("TV", "Sony", "01.09.2025_18:00", "", 1000)
-        item2 = Item("PC", "Intel", "01.10.2025_18:00", "", 2000)
+        item1 = Item("TV", "Sony", "01.09.2025", "", 1000)
+        item2 = Item("PC", "Intel", "01.10.2025", "", 2000)
         print('\n', item1 < item2, "Товар", item2.name, "стоит дороже, чем ", item1.name, "т.к", item2.cost, ">", item1.cost)
         print('\n', item2 < item1, "Товар", item1.name, "НЕ стоит дороже, чем ", item2.name, "т.к", item1.cost, "НЕ >", item2.cost)
 
     def test_09_many_tags(self):
         h = Hub()
-        item1 = Item("Projector", "ViewSonic", "01.09.2025_18:00", tags=["LCD", "4K", "16:9"], cost=1500)
+        item1 = Item("Projector", "ViewSonic", "01.09.2025", tags=["LCD", "4K", "16:9"], cost=1500)
         print('\n', item1)
         item1.add_tags(["white", "kronshtain"])
         print('\n', item1)
@@ -276,7 +278,7 @@ class TestItem(unittest.TestCase):
 
     def test_10_tagged(self):
         h = Hub()
-        item = Item("Phone", "Apple", "01.08.2025_18:00", tags=["16 Pro", "iphone", "white"], cost=10000)
+        item = Item("Phone", "Apple", "01.08.2025", tags=["16 Pro", "iphone", "white"], cost=10000)
         print('\n', item.is_tagged("16 Pro")) #вернет True т.к. тег есть у предмета
         print('\n', item.is_tagged(["16 Pro", "iphone"])) #вернет True т.к. все теги есть у предмета, передаем строку
         print('\n', item.is_tagged(["16 Pro", "samsung"])) #вернет False т.к. одного из тегов нет у предмета,  передаем строку
@@ -288,6 +290,50 @@ class TestItem(unittest.TestCase):
 
         print('\n',item1)
         print('\n',item2)
+
+
+class TestFindByDate(unittest.TestCase):
+
+    def test_01_set_list_of_items(self):
+        gen = Item.random_item_gen(100, 1000)
+        for i in range(15):
+            item = next(gen)
+            print('\n',item)
+
+
+    def test_02_range_date(self):
+        h = Hub()
+        results1 = h.find_by_date("2025.01.01", "2025.04.10")
+        print('\n', "Печать всех Итемов, оторые попадают в промежуток: ", '\n', results1)
+        dates_in_result1 = {item.dispatch_time for item in results1}
+        print('\n', "Только даты выдачи промежутка дат: ", dates_in_result1)
+
+    def test_03_one_date(self):
+        h = Hub()
+        # Печать результатов в конкретную дату если есть
+        results2 = h.find_by_date("2025.03.15")
+        print('\n', "Печать результатов в конкретную дату если есть: ", '\n', results2)
+        dates_in_result2 = {item.dispatch_time for item in results2}
+        print('\n', "Только даты выдачи конкретной даты: ", dates_in_result2)
+
+    def test_04_empty_res(self):
+        h = Hub()
+        #Заведомо пустой результат
+        results3 = h.find_by_date("2033.05.02", "2035.07.15")
+        print('\n', "Заведомо пустой результат: ", results3)
+
+    def test_05_too_many_args(self):
+        h = Hub()
+        # Ошибка - более 2х аргументов
+        results3 = h.find_by_date("01.01.2027", "10.01.2028", "10.01.2029")
+        print(results3)
+
+    def test_06_no_args(self):
+        h = Hub()
+        # Ошибка - более 2х аргументов
+        results4 = h.find_by_date()
+        print(results4)
+
 
 
 

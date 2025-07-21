@@ -11,7 +11,14 @@ class Item:
         Item._id_count += 1
         self.name = name
         self.description = description
-        self.dispatch_time = dispatch_time
+        def random_dispatch_time():
+            start_date = datetime(day=1, month=1, year=2025)
+            end_date = datetime(day=1, month=1, year=2026)
+            delta_days = (end_date - start_date).days
+            random_days = random.randint(0, delta_days - 1)
+            random_date = start_date + timedelta(days=random_days)
+            return random_date.strftime("%Y.%m.%d")
+        self.dispatch_time = random_dispatch_time()
         self._tags = set(tags) if tags else set()
         self._cost = cost
 
@@ -64,8 +71,6 @@ class Item:
     def set_cost(self, cost):
         self._cost = cost
 
-    def get_cost(self):
-        return self._cost
 
     def copy(self):
         return Item(
@@ -149,12 +154,12 @@ class Item:
         ]
 
         def random_dispatch_time_2025():
-            start_date = datetime(2025, 1, 1)
-            end_date = datetime(2026, 1, 1)
+            start_date = datetime(day=1, month=1, year=2025)
+            end_date = datetime(day=1, month=1, year=2026)
             delta_days = (end_date - start_date).days
             random_days = random.randint(0, delta_days - 1)
             random_date = start_date + timedelta(days=random_days)
-            return random_date.strftime("%d.%m.%Y")
+            return random_date.strftime("%Y.%m.%d")
 
         while True:
             cost = random.randint(min_cost, max_cost)

@@ -1,5 +1,7 @@
 from item import Item #Импорт класса Item
 import datetime #Импорт библиотеки дата
+from errors import MyIndexError
+from  errors import InvalidItemError
 
 
 
@@ -44,17 +46,18 @@ class Hub:
         if 0 <= index < len(self._items):
             return self._items[index]
         else:
-            return None
+            raise MyIndexError(index)
 
 
     def __iter__(self):
         return iter(self._items)
 
+
 #___________________________________________________________
 
     def add_item(self, item, index=None):
         if not isinstance(item, Item):
-            raise TypeError(f"Ожидался объект типа Item или его наследник, а получен {type(item).__name__}")
+            raise InvalidItemError(type(item).__name__)
         self._items.append(item)
 
     def find_by_id(self, id):
@@ -103,10 +106,19 @@ class Hub:
         return self._date
 
     def find_by_date(self, *args):
+
         if len(args) == 0:
             raise ValueError("Должна быть передана хотя бы одна дата")
-        if len(args) > 2:
+        elif len(args) == 1:
+            date = args[0]
+            results = [item for item in self._items if item.dispatch_time == date]
+        elif len(args) == 2:
+            start_date, end_date = args
+            results = [item for item in self._items if start_date <= item.dispatch_time <= end_date]
+        else:
             raise ValueError("Метод принимает не более двух дат")
+
+        return results
 
     def find_most_valuable(self, amount=1):
         sorted_items = sorted(self._items, key=lambda item: item._cost, reverse=True)
